@@ -3,11 +3,8 @@ import numpy as np
 from random import randint
 from numba import jit
 from numba.core import types
-
-# mem = numba.typed.Dict.empty(
-#         key_type = numba.core.types.unicode_type,
-#         value_type = numba.core.types.float64
-#     )
+from numba.typed import Dict
+from numba.core.types import unicode_type, float64
  
 @jit(nopython=True)
 def MakeMatrix(nRows):
@@ -24,10 +21,15 @@ def RMSD(ref, other):
     return (((other - ref) ** 2).mean() ** 0.5)
 
 @jit(nopython=True)
-def CalculateRMSD(data, matrix, nRows):
+def CalculateRMSD(data, matrix, nRows, mem):
     for i in range(nRows):
         for j in range(nRows):
-            matrix[i][j] = RMSD(data[i], data[j])
+            key = str(min(i, j)) + ", " + str(max(i, j))
+            if key not in mem:
+                mem[key] = RMSD(data[i], data[j])
+            else:
+                print("memoized")
+            matrix[i][j] = mem[key]
 
     return matrix
 
@@ -61,12 +63,16 @@ def FormatMatrix(matrix):
 def Main():
     n = 10
     data = np.array([[randint(0, 9) for _ in range(n)] for _ in range(n)])
+    mem = Dict.empty(
+        key_type = unicode_type,
+        value_type = float64
+    )
 
     print(data)
 
     matrix = MakeMatrix(len(data))
 
-    matrix = CalculateRMSD(data, matrix, len(data))
+    matrix = CalculateRMSD(data, matrix, len(data), mem)
 
     print(matrix)
 
