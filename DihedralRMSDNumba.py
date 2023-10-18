@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
 from random import randint
-from numba import jit
+from numba import jit, prange
 from numba.core import types
 from numba.typed import Dict
-from numba.core.types import unicode_type, float64
+from numba.core.types import unicode_type, float16
  
 @jit(nopython=True)
 def MakeMatrix(nRows):
@@ -12,7 +12,7 @@ def MakeMatrix(nRows):
     for _ in range(nRows):
         d.append([0.0 for _ in range(nRows)])
     
-    d = np.array(d)
+    d = np.array(d, dtype=float16)
 
     return d
 
@@ -20,10 +20,10 @@ def MakeMatrix(nRows):
 def RMSD(ref, other):
     return (((other - ref) ** 2).mean() ** 0.5)
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def CalculateRMSD(data, matrix, nRows, mem):
-    for i in range(nRows):
-        for j in range(nRows):
+    for i in prange(nRows):
+        for j in prange(nRows):
             key = str(min(i, j)) + ", " + str(max(i, j))
             if key not in mem:
                 mem[key] = RMSD(data[i], data[j])
@@ -66,18 +66,22 @@ def WriteToFile(data, fileName):
             f.write(line)
 
 def Main():
-    n = 10
-    data = np.array([[randint(0, 9) for _ in range(n)] for _ in range(n)])
+    data = pd.read_csv("../Dihedrals/Rep1/p53_DBD_ff19SB_Rep1_WT_WT_PhiPsi.dat", sep="\s+", dtype=np.float16).drop("#Frame", axis=1)
+    dataLength = len(data)
+    print(data)
+    data = data.to_numpy()
+    print(data)
+
     mem = Dict.empty(
         key_type = unicode_type,
-        value_type = float64
+        value_type = float16
     )
 
     print(data)
 
-    matrix = MakeMatrix(len(data))
+    matrix = MakeMatrix(dataLength)
 
-    matrix = CalculateRMSD(data, matrix, len(data), mem)
+    matrix = CalculateRMSD(data, matrix, dataLength, mem)
 
     print(matrix)
 
