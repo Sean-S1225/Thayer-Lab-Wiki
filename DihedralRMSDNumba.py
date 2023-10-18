@@ -27,13 +27,12 @@ def CalculateRMSD(data, matrix, nRows, mem):
             key = str(min(i, j)) + ", " + str(max(i, j))
             if key not in mem:
                 mem[key] = RMSD(data[i], data[j])
-            else:
-                print("memoized")
             matrix[i][j] = mem[key]
 
     return matrix
 
-def FormatMatrix(matrix):
+@jit() #Everything until WriteToFile will execute in nopython mode, writing to a file shouldn't take too long
+def FormatMatrix(matrix, fileName):
     """To be passed into cpptraj, the matrix has to be in a specific "melted" form.
     This takes an NxN matrix and converts it to the appropriate format.
 
@@ -41,7 +40,7 @@ def FormatMatrix(matrix):
         matrix (pd.DataFrame): The dataframe to be converted. Must be NxN.
 
     Returns:
-        (pd.DataFrame): The converted dataframe
+        None
     """
 
     # The data needs to go from being in a matrix to the following form:
@@ -51,15 +50,21 @@ def FormatMatrix(matrix):
     # Where only values from the upper triangle are kept
     # I'm not sure if the column names need to be like this
 
-    # https://stackoverflow.com/questions/34417685/melt-the-upper-triangular-matrix-of-a-pandas-dataframe
+    startIndex = 0
+    toWrite = []
+    toWrite.append("#F1 F2 RMSD\n")
+    for rowNum, row in enumerate(matrix):
+        for colNum, item in enumerate(row[startIndex:]):
+            toWrite.append(f"{rowNum} {colNum + startIndex} {item}\n")
+        startIndex += 1
+    
+    WriteToFile(toWrite, fileName)
 
-    matrix = matrix.where(np.triu(np.ones(matrix.shape)).astype(bool)) #This the lower triangle of the matrix to NaN
-    matrix = matrix.stack().reset_index()
-    matrix.columns = ['#F1','F2','RMSD']
+def WriteToFile(data, fileName):
+    with open(fileName, "w") as f:
+        for line in data:
+            f.write(line)
 
-    return matrix
-
-@jit(nopython=True)
 def Main():
     n = 10
     data = np.array([[randint(0, 9) for _ in range(n)] for _ in range(n)])
@@ -75,6 +80,8 @@ def Main():
     matrix = CalculateRMSD(data, matrix, len(data), mem)
 
     print(matrix)
+
+    FormatMatrix(matrix, "test.dat")
 
 if __name__ == "__main__":
     Main()
