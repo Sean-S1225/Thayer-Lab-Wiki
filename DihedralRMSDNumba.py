@@ -3,6 +3,7 @@ import numpy as np
 from numba import jit, prange
 from numba.typed import Dict
 from numba.core.types import unicode_type, float16
+from sys import argv
  
 @jit(nopython=True)
 def MakeMatrix(nRows):
@@ -63,8 +64,8 @@ def WriteToFile(data, fileName):
         for line in data:
             f.write(line)
 
-def Main():
-    data = pd.read_csv("../Dihedrals/Rep1/p53_DBD_ff19SB_Rep1_WT_WT_PhiPsi.dat", sep="\s+", dtype=np.float16).drop("#Frame", axis=1)
+def Main(fileInput, fileOutput):
+    data = pd.read_csv(fileInput, sep="\s+", dtype=np.float16).drop("#Frame", axis=1)
     dataLength = len(data)
     print(data)
     data = data.to_numpy()
@@ -83,7 +84,7 @@ def Main():
 
     print(matrix)
 
-    FormatMatrix(matrix, "test.dat")
+    FormatMatrix(matrix, fileOutput)
 
 if __name__ == "__main__":
-    Main()
+    Main(argv[1], argv[2])
