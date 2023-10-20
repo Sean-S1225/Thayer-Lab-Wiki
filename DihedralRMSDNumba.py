@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 from numba import jit, prange
-from numba.typed import Dict
-from numba.core.types import unicode_type, float16
 from sys import argv
  
 @jit(nopython=True)
@@ -11,7 +9,7 @@ def MakeMatrix(nRows):
     for _ in range(nRows):
         d.append([0.0 for _ in range(nRows)])
     
-    d = np.array(d, dtype=float16)
+    d = np.array(d, dtype=np.float16)
 
     return d
 
@@ -20,13 +18,13 @@ def RMSD(ref, other):
     return (((other - ref) ** 2).mean() ** 0.5)
 
 @jit(nopython=True, parallel=True)
-def CalculateRMSD(data, matrix, nRows, mem):
+def CalculateRMSD(data, matrix, nRows):
+    startIndex = 0
     for i in prange(nRows):
-        for j in prange(nRows):
-            key = str(min(i, j)) + ", " + str(max(i, j))
-            if key not in mem:
-                mem[key] = RMSD(data[i], data[j])
-            matrix[i][j] = mem[key]
+        for j in prange(startIndex, nRows):
+            rmsdVal = RMSD(data[i], data[j])
+            matrix[i][j] = rmsdVal
+            matrix[j][i] = rmsdVal
 
     return matrix
 
@@ -70,17 +68,11 @@ def Main(fileInput, fileOutput):
     print(data)
     data = data.to_numpy()
     print(data)
-
-    mem = Dict.empty(
-        key_type = unicode_type,
-        value_type = float16
-    )
-
     print(data)
 
     matrix = MakeMatrix(dataLength)
 
-    matrix = CalculateRMSD(data, matrix, dataLength, mem)
+    matrix = CalculateRMSD(data, matrix, dataLength)
 
     print(matrix)
 
