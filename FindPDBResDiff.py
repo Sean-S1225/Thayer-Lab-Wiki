@@ -24,14 +24,18 @@ def FindDifferences(files: list[str]) -> None:
                     currResidues[int(line[4])] = line[3]
         residues.append(currResidues)
 
-    numResidues = [max(list(x.keys())) for x in residues]
+    resKeysTemp = [list(x.keys()) for x in residues]
+    resKeys = []
+    for n in range(max([len(x) for x in resKeysTemp])):
+        resKeys.append([x[n] if n < len(x) else None for x in resKeysTemp])
 
-    for n in range(1, max(numResidues) + 1):
-        zippedResidues = [x[n] if n in x else "" for x in residues]
+    print(*files)
+    for keys in resKeys:
+        zippedResidues = [residues[i][keys[i]] if keys[i] else None for i in range(len(keys))]
         equality = [zippedResidues[0] == x for x in zippedResidues]
         
         if False in equality:
-            print(f"{n}: {zippedResidues}")
+            print(*list(zip(keys, zippedResidues)))
 
 if __name__ == "__main__":
     files = ["./1tup_PostTleap_Mark.pbd", "./1tup_PostTleap_Sean.pbd"]
