@@ -30,13 +30,27 @@ def FindDifferences(files: list[str]) -> None:
         resKeys.append([x[n] if n < len(x) else None for x in resKeysTemp])
 
     print(*files)
+    nameLengths = [len(file) for file in files]
     for keys in resKeys:
         zippedResidues = [residues[i][keys[i]] if keys[i] else None for i in range(len(keys))]
         equality = [zippedResidues[0] == x for x in zippedResidues]
         
         if False in equality:
-            print(*list(zip(keys, zippedResidues)))
+            s = ""
+            for fileVersion, nameLen in zip(zip(keys, zippedResidues), nameLengths):
+                s += f"{str(fileVersion): <{nameLen-1}}| "
+            print(s)
 
 if __name__ == "__main__":
-    files = ["./1tup_PostTleap_Mark.pbd", "./1tup_PostTleap_Sean.pbd"]
+    files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_WT_Rep1_lastframe.pdb"]
+    FindDifferences(files)
+
+    print("\n" * 4)
+
+    files = ["./p53_DBD_ff14SB_Rep1_Y220C_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_Y220C_Rep1_lastframe.pdb"]
+    FindDifferences(files)
+
+    print("\n" * 4)
+
+    files = ["./p53_DBD_ff14SB_Rep1_PK11000_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_PK11000_Rep1_lastframe.pdb"]
     FindDifferences(files)
