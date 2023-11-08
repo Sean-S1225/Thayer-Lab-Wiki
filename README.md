@@ -6,6 +6,7 @@ In this website, I would like to provide:
 * General introductory information (what molecular dynamic simulations are, how to set them up and run them)
 * Common analyses (RMSD, RMSF, Clustering, etc)
 * Miscellaneous pieces of accumulated knowledge (how to import specific packages, certain specific procedures, etc)
+* Links to resources, previous papers, etc
 * Template code for any and all of the above
 
 I have already written a lot of code, some of it as already been added to this repository, but it is highly specialized to my needs, and is therefore in need of refactoring to serve the needs of others. The rest of the website will be designed from the ground up.
