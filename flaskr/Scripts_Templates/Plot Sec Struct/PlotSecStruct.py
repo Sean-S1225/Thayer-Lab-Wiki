@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.patches as patches
 import pandas as pd
 import numpy as np
 from matplotlib.colors import ListedColormap
@@ -43,9 +44,9 @@ def PlotSecStructMatrices(RepName, titleNames, systems, directory, fileName = "S
 
     plt.rcParams["font.family"] = "Helvetica"
 
-    fig = plt.figure(layout='constrained', figsize=(20, 20))
+    fig = plt.figure(layout='constrained', figsize=(20, 10))
     fig.suptitle("Secondary Structure", fontsize=20)
-    subfigs = fig.subfigures(int(len(RepName)/2)+1, 2)
+    subfigs = fig.subfigures(int((len(RepName)+1)/2), 2)
 
     if type(subfigs) == np.ndarray:
         subfigs = subfigs.flatten()
@@ -115,6 +116,9 @@ def PlotSecStructMatrices(RepName, titleNames, systems, directory, fileName = "S
             ax.set_title(systemName)
             im = ax.imshow(system.T.to_numpy(), cmap=secStrucCMap, aspect="auto")
 
+            rect = patches.Rectangle((50, 50), 50, 50, color="black", fill=False)
+            ax.add_patch(rect)
+
         # im = axs[0].imshow(wt.T.to_numpy(), cmap=secStrucCMap, aspect="auto")
         # im = axs[1].imshow(y220c.T.to_numpy(), cmap=secStrucCMap, aspect="auto")
         # im = axs[2].imshow(pk11000.T.to_numpy(), cmap=secStrucCMap, aspect="auto")
@@ -150,6 +154,9 @@ def PlotSecStructMatrices(RepName, titleNames, systems, directory, fileName = "S
 #                       lambda file, sim: f"../Data/FL/FL/SecStruct/{file}_{sim}_SecStructTime.dat",
 #                       comparison=False)
 
-PlotSecStructMatrices(["Rep1", "Rep2", "Rep3", "Rep4", "Rep5"], ["Rep1", "Rep2", "Rep3", "Rep4", "Rep5"],
-                      ["WT", "Y220C", "PK11000"], lambda file, sim: f"../Data/DBD/ff19SB/SecStruct/p53_DBD_ff19SB_{file}_{sim}_SecStructTime.dat",
-                      comparison=False, fileName="DBD_SecStruct.png")
+# PlotSecStructMatrices(["Rep1", "Rep2", "Rep3", "Rep4", "Rep5", "Mark", "aff03ws", "aff03wsFL"], ["Rep1", "Rep2", "Rep3", "Rep4", "Rep5", "Mark", "aff03ws DBD", "aff03ws Full Length"],
+#                       ["WT"], lambda file, sim: f"../Data/DBD/ff19SB/SecStruct/p53_DBD_ff19SB_{file}_{sim}_SecStructTime.dat",
+#                       comparison=False, fileName="DBD_WT_SecStruct2.png")
+
+PlotSecStructMatrices(["Rep1", "Rep2"], ["Rep1", "Rep2"], ["WT", "Y220C", "PK11000"], lambda file, sim: f"../Data/DBD/ff14SB/SecStruct/p53_DBD_ff14SB_{file}_{sim}_SecStructTime.dat",
+                      "DBD_Mark_WT_SecStruct.png", False)

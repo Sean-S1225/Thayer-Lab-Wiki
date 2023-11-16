@@ -42,15 +42,16 @@ def FindDifferences(files: list[str]) -> None:
             print(s)
 
 if __name__ == "__main__":
-    files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_WT_Rep1_lastframe.pdb"]
+    # files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./0.15_80_10_pH7_1tup_B.genpdb.cpptraj (1).pdb"]
+    files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./0.15_80_10_pH7_1tup_B.genpdb.cpptraj (1).pdb"]
     FindDifferences(files)
 
-    print("\n" * 4)
+    # print("\n" * 4)
 
-    files = ["./p53_DBD_ff14SB_Rep1_Y220C_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_Y220C_Rep1_lastframe.pdb"]
-    FindDifferences(files)
+    # files = ["./p53_DBD_ff14SB_Rep1_Y220C_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_Y220C_Rep1_lastframe.pdb"]
+    # FindDifferences(files)
 
-    print("\n" * 4)
+    # print("\n" * 4)
 
-    files = ["./p53_DBD_ff14SB_Rep1_PK11000_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_PK11000_Rep1_lastframe.pdb"]
-    FindDifferences(files)
+    # files = ["./p53_DBD_ff14SB_Rep1_PK11000_MarksFirstFrame.pdb", "./p53_DBD_ff19SB_PK11000_Rep1_lastframe.pdb"]
+    # FindDifferences(files)
