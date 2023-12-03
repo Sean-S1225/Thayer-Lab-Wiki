@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
@@ -11,12 +11,47 @@
     {% endif %}
 </head>
 <body>
+
+    <header>
+        <h1>Thayer Lab Wiki</h1>
+
+        <ul>
+            <li>Intro to MD Simulations<br>
+            <ul>
+                <li>Intro and Theory</li>
+                <li>tLEaP</li>
+                <li>Energy Minimization</li>
+                <li>Heating</li>
+                <li>Equilibration</li>
+                <li>Neutral Dynamics</li>
+            </ul></li>
+            <li>Common Analyses<br>
+            <ul>
+                <li>RMSD</li>
+                <li>RMSF</li>
+                <li>Clustering</li>
+                <li>Hydrogen Bonding</li>
+                <li>Secondary Structure</li>
+                <li>Ramachandran Plots</li>
+                <li>Covariance Matrices/MD Sectors</li>
+                <li>Electrostatics</li>
+            </ul></li>
+            <li>Papers</li>
+            <li>Misc & FAQ</li>
+            <li>Code Cookbook</li>
+        </ul>
+    </header>
+
     <div class="container">
         {% block content %}{% endblock content %}
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <footer>
+        <p class="contact">Contact us here:</p>
+    </footer>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> -->
 </body>
 </html>
