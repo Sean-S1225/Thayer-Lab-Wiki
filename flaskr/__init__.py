@@ -36,7 +36,7 @@ def create_app(test_config=None):
     def RMSD():
         return render_template("RMSD.html")
 
-    @app.route('RMSF')
+    @app.route('/RMSF')
     def RMSF():
         return render_template("RMSF.html")
 

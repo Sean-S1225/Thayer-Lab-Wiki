@@ -1,4 +1,54 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<h1>RMSF: Root Mean Squared Fluctuation</h1>
+
+<p>View the code cookbook for RMSF snippets.</p>
+
+<p>
+    The Root Mean Squared Fluctuation (RMSF) is a very common type of analysis. It is similar to RMSD in that it reports
+    deviation with reference to some sort of common substructure, but instead of providing a single number for the 
+    overall deviation between a protein and a reference structure, it reports the deviation between individual
+    amino acids (or atoms). Typically, when RMSF is calculated over a whole simulation, the average structure is used as
+    reference, and a single number represents an amino acid's deviation over the course of the whole simulation.
+</p>
+
+<p>
+    Higher values indicate regions where the protein is more mobile over the course of the simulation, and lower 
+    values indicate regions where the protein is stable.
+</p>
+
+<p>The RMSF of amino acid \(i\) is calculated using the following formula:</p>
+
+<p>\[\text{RMSF}_i = \sqrt{\langle(x_i - \langle x_i\rangle)^2\rangle}\]</p>
+
+<p>
+    where \(x_i\) is the \(i\)-th residue of the protein \(x\), and \(\langle x_i\rangle\) is the average position of
+    residue \(i\) over the course of the simulation.
+</p>
+
+<p>Typically, RMSF restricts analysis to only the alpha-carbons or heavy backbone atoms.</p>
+
+<p>Here is an example of a typical RMSF plot:</p>
+
+<img src="static/RMSF.png", alt="An example of an RMSF plot", height="400px", width="auto">
+
+<p>We can observe a couple of notable things:</p>
+
+<ul>
+    <li>
+        The ends of the protein (~10 amino acids on either end) are highly mobile. This is likely
+        an artifact of the simulation; some "fraying" on the ends is common.
+    </li>
+    <li>
+        Within stable domains, regions such as 179-193 and 220-234 are highly mobile. These are areas
+        of interest for further studies.
+    </li>
+</ul>
+
+<p>
+    As is with RMSD, RMSF is more of a first-pass analysis that can provide valuable insight about where
+    to focus additional attention as the study of a simulation continues.
+</p>
+
 {% endblock content %}
