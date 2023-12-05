@@ -24,7 +24,16 @@ def create_app(test_config=None):
 
     # a simple page that says hello
     @app.route('/')
+    @app.route('/home')
     def hello():
         return render_template("home.html")
+    
+    @app.route('/analyses')
+    def analyses():
+        return render_template("analyses.html")
+    
+    @app.route('/RMSD')
+    def RMSD():
+        return render_template("RMSD.html")
 
     return app
