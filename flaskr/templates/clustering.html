@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Clustering</h1>
+
+<p>View the code cookbook for clustering code snippets.</p>
+
+<p>
+    Clustering is a very powerful tool that allows us to identify important substates
+    of a protein and reduce the amount of data analyzed. There are many different types
+    of clustering algorithms, such as K-Means, DBScann, DPeaks, etc; the Thayer Lab
+    primarily uses K-Means.
+</p>
+
+<p>
+    The basic idea of clustering is that given a number \(k\) and a metric, \(k\) representative frames of
+    a simulation are chosen as centroids. This is the first iteration.
+</p>
+
+<p>
+    Then the "distance" from every centroid to every other frame is calculated using the metric, and
+    in some process, the centroids are updated. Each frame is assigned a centroid, based on which is closest.
+    This is the second iteration.
+</p>
+
+<p>
+    Clustering typically continues until none of the centroid assignments change between iterations, or
+    some maximum iteration count is reached.
+</p>
+
+<p>
+    Different clustering methods have different ways of determining the number of clusters in a dataset.
+    In the K-Means Clustering, the user provides the number of clusters (thus the name).
+    Additionally, different metrics may be explored, buy by far the most common is <a href="RMSD">RMSD</a>.
+    Thus the distance between a frame and a centroid is the RMSD between the two.
+</p>
+
+<img src="KMeans.jpg" alt="A diagram showing how K-Means Clustering can split a dataset into natural clusters.">
+
+<p>
+    Since in K-Means Clustering, the choice of \(k\) clusters is quite arbitrary, we commonly compute
+    the algorithm for \(2 \leq k \leq 7\), then use an elbow test to determine how well the choice of
+    \(k\) partitions the data (does one cluster represent many different substates, is one substate
+    split between multiple different clusters, etc.).
+</p>
+
+<img src="ElbowTest.jpg" alt="An exponential decay plot showing the diminishing returns of adding more clusters.">
+
+<p>
+    When the number of
+</p>
+
+{% endblock content %}
