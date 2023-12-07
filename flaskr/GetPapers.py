@@ -1,31 +1,61 @@
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://scholar.google.com/citations?hl=en&user=qw1NDkwAAAAJ&view_op=list_works&sortby=pubdate"
-headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9"} 
-r = requests.get(url=URL, headers=headers) 
+def GetRecentPapers() -> list:
+    """Gets the recent papers that are published with Kelly Thayer as an author
 
-soup = BeautifulSoup(r.content, "html5lib")
-# print(soup.prettify()) 
+    Returns:
+        A list of dictionaries containing relevant information about each paper
+    """
+    URL = "https://scholar.google.com/citations?hl=en&user=qw1NDkwAAAAJ&view_op=list_works&sortby=pubdate"
+    headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9"} 
+    r = requests.get(url=URL, headers=headers) 
 
-table = soup.find("div", attrs={"id": "gsc_a_tw"})
-articles = []
+    soup = BeautifulSoup(r.content, "html5lib")
+    # print(soup.prettify()) 
 
-for row in table.find_all("tr", attrs={"class": "gsc_a_tr"}):
-    article = {}
+    table = soup.find("div", attrs={"id": "gsc_a_tw"})
+    articles = []
 
-    info, citations, year = row.find_all("td")
+    for row in table.find_all("tr", attrs={"class": "gsc_a_tr"}):
+        article = {}
 
-    article["title"] = info.a.text
-    authors, journal = [x.text for x in info.find_all("div")]
-    journal = journal.split(",")[0]
-    article["authors"], article["journal"] = authors, journal
+        info, citations, year = row.find_all("td")
 
-    if citations.a.text:
-        article["citations"] = citations.a.text
-    else:
-        article["citations"] = 0
+        article["title"] = info.a.text
+        authors, journal = [x.text for x in info.find_all("div")]
+        journal = journal.split(",")[0]
+        article["authors"], article["journal"] = authors, journal
 
-    article["year"] = year.span.text
+        if citations.a.text:
+            article["citations"] = citations.a.text
+        else:
+            article["citations"] = 0
 
-    articles.append(article)
+        article["year"] = year.span.text
+
+        articles.append(article)
+
+    return articles
+
+def GeneratePages(articles: list) -> None:
+    text = [
+        "{% extends \"layout.html\" %}\n",
+        "{% block content %}\n",
+        "<h1>Recent Publications by the Thayer Lab</h1>\n"
+    ]
+    for article in articles:
+        text.append("<div class=\"paper\">\n")
+        text.append(f"<h2>{article['title']}</h2>\n")
+        text.append(f"<p>Authors: {article['authors']}</p>\n")
+        text.append(f"<p>Year Published: {article['year']}</p>\n")
+        text.append(f"<p>Number of Citations: {article['citations']}</p>\n")
+        text.append("</div>\n")
+        text.append("<br><br>\n")
+
+    text.append("{% endblock content %}\n")
+    with open("./templates/papers.html", "w") as file:
+        file.writelines(text)
+
+if __name__ == "__main__":
+    GeneratePages(GetRecentPapers())

@@ -43,5 +43,9 @@ def create_app(test_config=None):
     @app.route('/clustering')
     def Clustering():
         return render_template("clustering.html")
+    
+    @app.route('/papers')
+    def RecentPublications():
+        return render_template("papers.html")
 
     return app
