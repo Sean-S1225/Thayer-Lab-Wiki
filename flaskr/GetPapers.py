@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+from sys import path
+path.append("../")
 from  unit_test import UnitTest, UnitTestError
 
 def GetPageContent() -> BeautifulSoup:
@@ -69,7 +71,7 @@ def GeneratePages(articles: list, dest: str) -> None:
         text.append(f"<p>Year Published: {article['year']}</p>\n")
         text.append(f"<p>Number of Citations: {article['citations']}</p>\n")
         text.append("</div>\n")
-        text.append("<br><br>\n")
+        text.append("<br><br>\n\n")
 
     text.append("{% endblock content %}\n")
     with open(dest, "w") as file:
@@ -77,3 +79,28 @@ def GeneratePages(articles: list, dest: str) -> None:
 
 if __name__ == "__main__":
     GeneratePages(GetRecentPapers(GetPageContent()), "./templates/papers.html")
+
+    def Read(fileName):
+        with open(fileName, "r") as file:
+            return file.read()
+
+    UnitTest(GetRecentPapers, (BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html5lib"),),
+             ([{"title": "Molecular Dynamics of Mismatch Detection–How MutS Uses Indirect Readout to Find Errors in DNA", 
+               "authors": "A Jayaraj, KM Thayer, DL Beveridge, MM Hingorani", "journal": "Biophysical Journal", "citations": 0, "year": "2023"}],))
+    
+    GeneratePages(GetRecentPapers(BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html5lib")), "../tests/RecentPublications/Output.html")
+
+    UnitTest(Read, ("../tests/RecentPublications/Output.html",), (\
+"""{% extends "layout.html" %}
+{% block content %}
+<h1>Recent Publications by the Thayer Lab</h1>
+<div class="paper">
+<h2>Molecular Dynamics of Mismatch Detection–How MutS Uses Indirect Readout to Find Errors in DNA</h2>
+<p>Authors: A Jayaraj, KM Thayer, DL Beveridge, MM Hingorani</p>
+<p>Year Published: 2023</p>
+<p>Number of Citations: 0</p>
+</div>
+<br><br>
+
+{% endblock content %}
+""",))
