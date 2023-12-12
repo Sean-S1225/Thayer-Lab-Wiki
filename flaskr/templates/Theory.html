@@ -52,9 +52,22 @@
     An MD simulation operates on this formula (or some slight variation of it):
 </p>
 
-<p style="color: red;">
-    add formula
+<p>
+    \[E_{total} = \sum_{bonds}K(r-r_{eq})^2 + \sum_{angles}K_\theta(\theta - \theta_{eq})^2 + 
+    \sum_{dihedrals}\frac{V_n}{2}(1+\cos(n\phi - \gamma)) + \sum_{i < j}\left(\frac{A_{ij}}{R_{ij}^{12}} - 
+    \frac{B_{ij}}{R_{ij}^6} + \frac{q_iq_j}{\varepsilon R_{ij}}\right)\]
 </p>
+
+<p>
+    Where the four portions of the above equation correspond to:
+</p>
+
+<ol>
+    <li>Energetics between bonded atoms (models as springs)</li>
+    <li>Rotational energies</li>
+    <li>Dihedral energies</li>
+    <li>Van der Waals interactions modeled through Lennard-Jones potential and electrostatic interactions</li>
+</ol>
 
 <p>
     Running an MD simulation typically consists of five steps:
@@ -90,6 +103,16 @@
         <ul>
             <li>The simulation itself; this is where the data we care about is generated</li>
         </ul>
+    </li>
+</ul>
+
+<p>Sources:</p>
+<ul>
+    <li>
+        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6209097/#:~:text=Molecular%20dynamics%20(MD)%20simulations%20predict,and%20Mc%20Cammon%2C%202002).
+    </li>
+    <li>
+        https://bmcbiol.biomedcentral.com/articles/10.1186/1741-7007-9-71
     </li>
 </ul>
 
