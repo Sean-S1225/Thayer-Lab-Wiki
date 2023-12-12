@@ -47,5 +47,13 @@ def create_app(test_config=None):
     @app.route('/papers')
     def RecentPublications():
         return render_template("papers.html")
+    
+    @app.route("/Intro")
+    def Intro():
+        return render_template("Intro.html")
+    
+    @app.route("/Theory")
+    def Theory():
+        return render_template("Theory.html")
 
     return app

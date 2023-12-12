@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from sys import path
 path.append("../")
-from  unit_test import UnitTest, UnitTestError
+from  unit_test import UnitTest
 
 def GetPageContent() -> BeautifulSoup:
     """Returns HTML file containing information about recent Thayer lab publications
@@ -11,7 +11,8 @@ def GetPageContent() -> BeautifulSoup:
         BeautifulSoup object containing information about recent publications
     """
     URL = "https://scholar.google.com/citations?hl=en&user=qw1NDkwAAAAJ&view_op=list_works&sortby=pubdate"
-    headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9"} 
+    headers = {'User-Agent': 
+               "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9"} 
     r = requests.get(url=URL, headers=headers) 
 
     soup = BeautifulSoup(r.content, "html5lib")
@@ -78,6 +79,14 @@ def GeneratePages(articles: list, dest: str) -> None:
         file.writelines(text)
 
 if __name__ == "__main__":
+    # print(GetPageContent().prettify())
+    x = GetRecentPapers(GetPageContent())
+    for y in x:
+        print("{")
+        for key, val in y.items():
+            print(f"\t{key}: {val}")
+        print("}")
+
     GeneratePages(GetRecentPapers(GetPageContent()), "./templates/papers.html")
 
     def Read(fileName):
