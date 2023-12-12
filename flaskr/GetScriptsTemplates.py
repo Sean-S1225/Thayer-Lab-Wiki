@@ -55,14 +55,32 @@ def CheckDate(date: str) -> bool:
     
     return date[0] in months and str.isdigit(date[1]) and int(date[1]) <= 31 and len(str(date[2])) == 4
 
-def CheckEverythingsThere(jsonDict: dict) -> bool:
+def CheckFile(file: str, prefix) -> bool:
+    """Ensures the file is an actual file, and the correct one
+
+    Args:
+        file: The string to check
+
+    Returns:
+        True if the string is valid, False otherwise
+    """
+
+    toReturn = False
+    try:
+        toReturn = os.path.isfile(os.path.join(prefix, file))
+    except NotADirectoryError:
+        return False
+    
+    return toReturn
+
+def CheckEverythingsThere(jsonDict: dict, prefix = "flaskr/Scripts_Templates") -> bool:
     """Ensures that in the data contained in a json file, all the parameters that should be there are:
-    * Uploader Name [string]
+    * Uploader_Name [string]
     * Created [date (string)]
-    * Last Updated [date (string)]
+    * Last_Updated [date (string)]
     * Program [string]
     * Name [string]
-    * File Name [string]
+    * File_Name [string]
     * Description [string]
 
     Args:
@@ -71,17 +89,20 @@ def CheckEverythingsThere(jsonDict: dict) -> bool:
     Returns:
         True if all of the necessary data is there, False otherwise.
     """
-    fields = ["Uploader Name", "Created", "Last Updated", "Program", "Name", "File Name", "Description"]
+    fields = ["Uploader_Name", "Created", "Last_Updated", "Program", "Name", "File_Name", "Description"]
     for field in fields:
         if not field in jsonDict:
             return False
-        
-    if CheckDate(jsonDict["Created"]) == False or CheckDate(jsonDict["Last Updated"]) == False:
+    
+    if CheckDate(jsonDict["Created"]) == False or CheckDate(jsonDict["Last_Updated"]) == False:
         return False
-        
+    
+    if CheckFile(jsonDict["File_Name"], prefix) == False:
+        return False
+    
     return True
 
-def GetJSONDataFromDirectory(dir: str = "./Scripts_Templates") -> list[str]:
+def GetJSONDataFromDirectory(dir: str = "flaskr/Scripts_Templates") -> list[str]:
     """From the passed in directory, returns the json data contained in the files
 
     Args:
@@ -96,6 +117,7 @@ def GetJSONDataFromDirectory(dir: str = "./Scripts_Templates") -> list[str]:
     for file in files:
         temp = GetJSONData(file)
         if CheckEverythingsThere(temp):
+            temp |= {"ID": len(data)}
             data.append(temp)
 
     return data
@@ -107,19 +129,24 @@ if __name__ == "__main__":
     unit_test.UnitTest(CheckDate, ("January -1 1990",), (False,))
     unit_test.UnitTest(CheckDate, ("March 16.5 1990",), (False,))
 
-    def TestHelper(file):
-        return CheckEverythingsThere(GetJSONData(file))
 
-    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Missing1.json",), (False,))
-    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Missing2.json",), (False,))
-    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/WrongDate.json",), (False,))
-    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Extra.json",), (True,))
-    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Correct.json",), (True,))
+    unit_test.UnitTest(CheckFile, ("Dihedral RMSD/DihedralRMSDNumba.py", "./Scripts_Templates/"), (True,))
+    unit_test.UnitTest(CheckFile, ("Dihedral RMSD/DihedralRMSDNumba.py", "./"), (False,))
+
+    def TestHelper(file):
+        return CheckEverythingsThere(GetJSONData(file), "../tests/Scripts_Templates/")
+
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Missing1",), (False,))
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Missing2",), (False,))
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/WrongDate",), (False,))
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/WrongDate2",), (False,))
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Extra",), (True,))
+    unit_test.UnitTest(TestHelper, ("../tests/Scripts_Templates/Correct",), (True,))
 
     unit_test.UnitTest(GetJSONDataFromDirectory, ("../tests/Scripts_Templates/",), (
-        [{'Uploader Name': 'Sean', 'Created': 'October 18 2023', 'Last Updated': 'October 19 2023',
-          'Program': 'Python', 'Name': 'Dihedral RMSD (Numba)', 'File Name': './DihedralRMSDNumba.py',
-          'Description': "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles", 'New': 'nothing!'}, 
-         {'Uploader Name': 'Sean', 'Created': 'October 18 2023', 'Last Updated': 'October 19 2023',
-          'Program': 'Python', 'Name': 'Dihedral RMSD (Numba)', 'File Name': './DihedralRMSDNumba.py',
-          'Description': "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"}],))
+        [{'Uploader_Name': 'Sean', 'Created': 'October 18 2023', 'Last_Updated': 'October 19 2023',
+          'Program': 'Python', 'Name': 'Dihedral RMSD (Numba)', 'File_Name': 'Correct/test.py',
+          'Description': "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles", "ID": 0}, 
+         {'Uploader_Name': 'Sean', 'Created': 'October 18 2023', 'Last_Updated': 'October 19 2023',
+          'Program': 'Python', 'Name': 'Dihedral RMSD (Numba)', 'File_Name': 'Extra/test.py',
+          'Description': "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles", 'New': 'nothing!', "ID": 1}],))

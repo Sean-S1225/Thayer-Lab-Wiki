@@ -1,8 +1,9 @@
 {
-    "Uploader Name": "Sean",
-    "Last Updated": "October 19 2023",
+    "Uploader_Name": "Sean",
+    "Created": "October 18 202",
+    "Last_Updated": "Oct 19 2023",
     "Program": "Python",
     "Name": "Dihedral RMSD (Numba)",
-    "File Name": "./DihedralRMSDNumba.py",
+    "File_Name": "WrongDate2/test.py",
     "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
 }

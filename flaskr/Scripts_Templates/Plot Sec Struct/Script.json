@@ -1,9 +1,9 @@
 {
-    "Uploader Name": "Sean",
+    "Uploader_Name": "Sean",
     "Created": "October 18 2023",
-    "Last Updated": "October 19 2023",
+    "Last_Updated": "October 19 2023",
     "Program": "Python",
-    "Name": "Dihedral RMSD (Numba)",
-    "File Name": "./DihedralRMSDNumba.py",
-    "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+    "Name": "Plot Secondary Structure",
+    "File_Name": "Plot Sec Struct/PlotSecStruct.py",
+    "Description": "Plots the Secondary Structure of a protein as a function of time"
 }

@@ -1,5 +1,8 @@
 import os
 from flask import Flask, render_template
+from sys import path
+path.append("./flaskr")
+import GetScriptsTemplates
 
 def create_app(test_config=None):
     # create and configure the app
@@ -55,5 +58,23 @@ def create_app(test_config=None):
     @app.route("/Theory")
     def Theory():
         return render_template("Theory.html")
+    
+    @app.route("/Cookbook")
+    def Cookbook():
+        return render_template("Cookbook.html", posts=GetScriptsTemplates.GetJSONDataFromDirectory())
+    
+    @app.route("/post/<int:id>")
+    def Recipe(id):
+
+        recipes = GetScriptsTemplates.GetJSONDataFromDirectory()
+        recipe = next((r for r in recipes if r['ID'] == id), None)
+
+        if recipe:
+            temp = None
+            with open("flaskr/Scripts_Templates/" + recipe["File_Name"], "r") as file:
+                temp = file.readlines()
+            recipe |= {"Script": temp}
+
+        return render_template("recipe.html", post=recipe)
 
     return app

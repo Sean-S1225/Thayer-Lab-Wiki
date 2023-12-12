@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{ post["Name"] }}</h1>
+<h2>{{ post["Description"] }}</h2>
+<h2>Uploaded by: {{ post["Uploader_Name"] }}</h2>
+<p>Created: {{ post["Created"] }}</p>
+<p>Last updated: {{ post["Last_Updated"] }}</p>
+<p>Program: {{ post["Program"] }}</p>
+
+<br>
+<p>Script:</p>
+{% for line in post["Script"] %}
+    <p>{{ line }}</p>
+{% endfor %}
+
+{% endblock content %}

@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 
+{% for post in posts %}
+    <h1>{{ post.Name }}</h1>
+    <h2>{{ post.Description }}</h2>
+    <h2>Uploaded by: {{ post.Uploader_Name }}</h2>
+    <a href="{{ url_for('Recipe', id=post['ID']) }}">Click me to learn more</a>
+{% endfor %}
+
 {% endblock content %}

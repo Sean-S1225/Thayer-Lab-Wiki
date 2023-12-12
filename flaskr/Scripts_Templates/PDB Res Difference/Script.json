@@ -1,9 +1,9 @@
 {
-    "Uploader Name": "Sean",
-    "Created": "October 18 2023",
-    "Last Updated": "October 19 2023",
+    "Uploader_Name": "Sean",
+    "Created": "December 3 2023",
+    "Last_Updated": "December 3 2023",
     "Program": "Python",
-    "Name": "Dihedral RMSD (Numba)",
-    "File Name": "./DihedralRMSDNumba.py",
-    "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+    "Name": "PDB Residue Difference",
+    "File_Name": "PDB Res Difference/FindPDBResDiff.py",
+    "Description": "Compares the amino acid differences between two or more .pdb scripts and prints them to the terminal"
 }

@@ -43,7 +43,10 @@ def FindDifferences(files: list[str]) -> None:
 
 if __name__ == "__main__":
     # files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./0.15_80_10_pH7_1tup_B.genpdb.cpptraj (1).pdb"]
-    files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./0.15_80_10_pH7_1tup_B.genpdb.cpptraj (1).pdb"]
+    # files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./0.15_80_10_pH7_1tup_B.genpdb.cpptraj (1).pdb"]
+    # FindDifferences(files)
+
+    files = ["./p53_DBD_ff14SB_Rep1_WT_MarksFirstFrame.pdb", "./p53_FL_DBD_ff19SB_Rep1_WT_PK11000_FirstFrame.pdb", "./p53_DBD_ff19SB_Rep1_WT_PK11000_FirstFrame.pdb"]
     FindDifferences(files)
 
     # print("\n" * 4)
