@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from sys import path
 path.append("./flaskr")
 import GetScriptsTemplates
+import GetUploadedContent
 
 def create_app(test_config=None):
     # create and configure the app
@@ -59,14 +60,35 @@ def create_app(test_config=None):
     def Theory():
         return render_template("Theory.html")
     
+    # @app.route("/Cookbook")
+    # def Cookbook():
+    #     return render_template("Cookbook.html", posts=GetScriptsTemplates.GetJSONDataFromDirectory())
+
+    def GetCookbookPosts():
+        posts = GetUploadedContent.GetValidJSONFiles(
+            path="flaskr/Scripts_Templates",
+            jsonName="Script.json",
+            requiredFields=["Uploader_Name", "Created", "Last_Updated", "Program", "Name", "File_Name", "Description"],
+            verify={
+                "Created": GetUploadedContent.CheckDate,
+                "Last_Updated": GetUploadedContent.CheckDate
+                "File_Name": lambda scriptName: os.path.isfile(os.path.join("flaskr/Scripts_Templates", scriptName))
+            }
+        )
+
+        for index, post in enumerate(posts):
+            post |= {"ID": index}
+
+        return posts
+
     @app.route("/Cookbook")
     def Cookbook():
-        return render_template("Cookbook.html", posts=GetScriptsTemplates.GetJSONDataFromDirectory())
+        return render_template("Cookbook.html", posts=GetCookbookPosts())
     
     @app.route("/post/<int:id>")
     def Recipe(id):
 
-        recipes = GetScriptsTemplates.GetJSONDataFromDirectory()
+        recipes = GetCookbookPosts()
         recipe = next((r for r in recipes if r['ID'] == id), None)
 
         if recipe:
@@ -76,5 +98,28 @@ def create_app(test_config=None):
             recipe |= {"Script": temp}
 
         return render_template("recipe.html", post=recipe)
+
+    def GetDocumentation():
+        posts = GetUploadedContent.GetValidJSONFiles(
+            path="flaskr/Documentation",
+            jsonName="Documentation.json",
+            requiredFields=["Uploader_Name", "Last_Updated", "Name", "File_Name", "Description"],
+            verify={
+                "Created": GetUploadedContent.CheckDate,
+                "Last_Updated": GetUploadedContent.CheckDate
+                "File_Name": lambda scriptName: os.path.isfile(os.path.join("flaskr/Documentation", scriptName))
+            }
+        )
+
+        for index, post in enumerate(posts):
+            with open(os.path.join("flask/Documentation", post["File_Name"]), "r") as file: 
+                post |= {"Text": "<br>".join(file.readlines())}
+            post |= {"ID": index}
+
+        return posts
+
+    @app.route("/Documentation")
+    def Documentation():
+        return render_template("Documentation.html", posts=GetDocumentation())
 
     return app

@@ -46,3 +46,25 @@ def VerifyFields(jsonDicts: list[dict], verify: dict[str, callable[[str], bool]]
 
     return jsonDicts
 
+def CheckDate(date: str) -> bool:
+    """Ensures a date is in the following format: "[Month] [day] [year]", where the first letter of the full
+    month name is capitalized, the full four-number year is given, and there are no commas or any other characters.
+
+    Args:
+        date: The string to check
+
+    Returns:
+        True if the date is in the correct format, False otherwise
+    """
+    date = date.split(" ")
+    if not len(date) == 3:
+        return False
+    
+    months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"]
+    
+    return date[0] in months and str.isdigit(date[1]) and int(date[1]) <= 31 and len(str(date[2])) == 4
+
+def GetValidJSONFiles(path: str, jsonName: str, requiredFields: list[str], verify: dict[str, callable[[str], bool]]) -> list[dict]:
+    """Implements all of the above functions in one fantastic line :)"""
+    return VerifyFields(CheckJSONFiles(GetJSONFiles(GetDirectories(path), jsonName), requiredFields), verify)
