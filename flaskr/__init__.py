@@ -2,8 +2,8 @@ import os
 from flask import Flask, render_template
 from sys import path
 path.append("./flaskr")
-import GetScriptsTemplates
 import GetUploadedContent
+import FormatDocumentation
 
 def create_app(test_config=None):
     # create and configure the app
@@ -59,10 +59,6 @@ def create_app(test_config=None):
     @app.route("/Theory")
     def Theory():
         return render_template("Theory.html")
-    
-    # @app.route("/Cookbook")
-    # def Cookbook():
-    #     return render_template("Cookbook.html", posts=GetScriptsTemplates.GetJSONDataFromDirectory())
 
     def GetCookbookPosts():
         posts = GetUploadedContent.GetValidJSONFiles(
@@ -71,7 +67,7 @@ def create_app(test_config=None):
             requiredFields=["Uploader_Name", "Created", "Last_Updated", "Program", "Name", "File_Name", "Description"],
             verify={
                 "Created": GetUploadedContent.CheckDate,
-                "Last_Updated": GetUploadedContent.CheckDate
+                "Last_Updated": GetUploadedContent.CheckDate,
                 "File_Name": lambda scriptName: os.path.isfile(os.path.join("flaskr/Scripts_Templates", scriptName))
             }
         )
@@ -103,18 +99,18 @@ def create_app(test_config=None):
         posts = GetUploadedContent.GetValidJSONFiles(
             path="flaskr/Documentation",
             jsonName="Documentation.json",
-            requiredFields=["Uploader_Name", "Last_Updated", "Name", "File_Name", "Description"],
+            requiredFields=["Uploader_Name", "Last_Updated", "Title", "File_Name", "Description"],
             verify={
-                "Created": GetUploadedContent.CheckDate,
-                "Last_Updated": GetUploadedContent.CheckDate
+                "Last_Updated": GetUploadedContent.CheckDate,
                 "File_Name": lambda scriptName: os.path.isfile(os.path.join("flaskr/Documentation", scriptName))
             }
         )
 
-        for index, post in enumerate(posts):
-            with open(os.path.join("flask/Documentation", post["File_Name"]), "r") as file: 
-                post |= {"Text": "<br>".join(file.readlines())}
-            post |= {"ID": index}
+        for post in posts:
+            temp = None
+            with open(os.path.join("flaskr/Documentation", post["File_Name"]), "r") as file: 
+                temp = file.readlines()
+            post |= {"Text": FormatDocumentation.FormatDocumentation(temp)}
 
         return posts
 

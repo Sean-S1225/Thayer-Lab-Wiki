@@ -1,4 +1,4 @@
-from collections import callable
+from collections.abc import Callable
 import os
 import json
 
@@ -8,7 +8,7 @@ def GetDirectories(path: str) -> list[str]:
     
     directories = []
     for x in os.listdir(path):
-        if os.path.isdir((dir := os.join(path, x))):
+        if os.path.isdir((dir := os.path.join(path, x))):
             directories.append(dir)
 
     return directories
@@ -32,17 +32,19 @@ def CheckJSONFiles(jsonDicts: list[dict], requiredFields: list[str]) -> list[dic
         for field in requiredFields:
             if field not in d:
                 jsonDicts.remove(d)
+                break
     
     return jsonDicts
 
 
-def VerifyFields(jsonDicts: list[dict], verify: dict[str, callable[[str], bool]]) -> list[dict]:
+def VerifyFields(jsonDicts: list[dict], verify: dict[str, Callable[[str], bool]]) -> list[dict]:
     """Returns the .json dictionaries that pass some sort of verification on a specific field"""
 
     for d in jsonDicts:
         for key, check in verify.items():
             if not check(d[key]):
                 jsonDicts.remove(d)
+                break
 
     return jsonDicts
 
@@ -65,6 +67,6 @@ def CheckDate(date: str) -> bool:
     
     return date[0] in months and str.isdigit(date[1]) and int(date[1]) <= 31 and len(str(date[2])) == 4
 
-def GetValidJSONFiles(path: str, jsonName: str, requiredFields: list[str], verify: dict[str, callable[[str], bool]]) -> list[dict]:
+def GetValidJSONFiles(path: str, jsonName: str, requiredFields: list[str], verify: dict[str, Callable[[str], bool]]) -> list[dict]:
     """Implements all of the above functions in one fantastic line :)"""
     return VerifyFields(CheckJSONFiles(GetJSONFiles(GetDirectories(path), jsonName), requiredFields), verify)
