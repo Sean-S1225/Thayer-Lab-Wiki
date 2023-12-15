@@ -1,6 +1,9 @@
 from collections.abc import Callable
 import os
 import json
+from sys import path
+path.append("../")
+import unit_test
 
 def GetDirectories(path: str) -> list[str]:
     """Gets all directories in the user-uploaded section. This is the first step,
@@ -40,13 +43,17 @@ def CheckJSONFiles(jsonDicts: list[dict], requiredFields: list[str]) -> list[dic
 def VerifyFields(jsonDicts: list[dict], verify: dict[str, Callable[[str], bool]]) -> list[dict]:
     """Returns the .json dictionaries that pass some sort of verification on a specific field"""
 
+    toReturn = []
+
     for d in jsonDicts:
+        include = True
         for key, check in verify.items():
             if not check(d[key]):
-                jsonDicts.remove(d)
-                break
+                include = False
+        if include:
+            toReturn.append(d)
 
-    return jsonDicts
+    return toReturn
 
 def CheckDate(date: str) -> bool:
     """Ensures a date is in the following format: "[Month] [day] [year]", where the first letter of the full
@@ -70,3 +77,94 @@ def CheckDate(date: str) -> bool:
 def GetValidJSONFiles(path: str, jsonName: str, requiredFields: list[str], verify: dict[str, Callable[[str], bool]]) -> list[dict]:
     """Implements all of the above functions in one fantastic line :)"""
     return VerifyFields(CheckJSONFiles(GetJSONFiles(GetDirectories(path), jsonName), requiredFields), verify)
+
+if __name__ == "__main__":
+
+    unit_test.UnitTest(GetDirectories, ("../tests/Scripts_Templates/",), 
+                       (["../tests/Scripts_Templates/Correct", "../tests/Scripts_Templates/Extra", 
+                        "../tests/Scripts_Templates/Missing1", "../tests/Scripts_Templates/Missing1", 
+                        "../tests/Scripts_Templates/Missing2", "../tests/Scripts_Templates/WrongDate", 
+                        "../tests/Scripts_Templates/WrongDate2"],), lambda x, y: set(x[0]) == set(y[0]))
+
+    unit_test.UnitTest(GetJSONFiles, (["../tests/Scripts_Templates/Correct", "../tests/Scripts_Templates/Extra"], "Script.json"), 
+                       ([{"Uploader_Name": "Sean",
+                         "Created": "October 18 2023",
+                         "Last_Updated": "October 19 2023",
+                         "Program": "Python",
+                         "Name": "Dihedral RMSD (Numba)",
+                         "File_Name": "Correct/test.py",
+                         "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"},
+                        {"Uploader_Name": "Sean",
+                         "Created": "October 18 2023",
+                         "Last_Updated": "October 19 2023",
+                         "Program": "Python",
+                         "Name": "Dihedral RMSD (Numba)",
+                         "File_Name": "Extra/test.py",
+                         "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles",
+                         "New": "nothing!"}],))
+    
+    unit_test.UnitTest(GetJSONFiles, (["../tests/Scripts_Templates/WrongDate", "../tests/Scripts_Templates/WrongDate2"], "Script.json"),
+                       ([{
+                        "Uploader_Name": "Sean",
+                        "Created": "October 18 2023",
+                        "Last_Updated": "Oct 19 2023",
+                        "Program": "Python",
+                        "Name": "Dihedral RMSD (Numba)",
+                        "File_Name": "WrongDate/test.py",
+                        "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+                       },
+                       {
+                        "Uploader_Name": "Sean",
+                        "Created": "October 18 202",
+                        "Last_Updated": "Oct 19 2023",
+                        "Program": "Python",
+                        "Name": "Dihedral RMSD (Numba)",
+                        "File_Name": "WrongDate2/test.py",
+                        "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+                       }],))
+    
+    unit_test.UnitTest(CheckJSONFiles, (GetJSONFiles(["../tests/Scripts_Templates/Correct", "../tests/Scripts_Templates/Extra"], "Script.json"), 
+                                        ["Uploader_Name", "Created", "Last_Updated", "Program", "Name", "File_Name", "Description"]),
+                       ([{"Uploader_Name": "Sean",
+                          "Created": "October 18 2023",
+                          "Last_Updated": "October 19 2023",
+                          "Program": "Python",
+                          "Name": "Dihedral RMSD (Numba)",
+                          "File_Name": "Correct/test.py",
+                          "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"},
+                        {"Uploader_Name": "Sean",
+                          "Created": "October 18 2023",
+                          "Last_Updated": "October 19 2023",
+                          "Program": "Python",
+                          "Name": "Dihedral RMSD (Numba)",
+                          "File_Name": "Extra/test.py",
+                          "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles",
+                          "New": "nothing!"}],))
+    
+    unit_test.UnitTest(VerifyFields, args=([
+                        {
+                        "Uploader_Name": "Sean",
+                        "Created": "October 18 2023",
+                        "Last_Updated": "Oct 19 2023",
+                        "Program": "Python",
+                        "Name": "Dihedral RMSD (Numba)",
+                        "File_Name": "WrongDate/test.py",
+                        "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+                       },
+                       {
+                        "Uploader_Name": "Sean",
+                        "Created": "October 18 202",
+                        "Last_Updated": "Oct 19 2023",
+                        "Program": "Python",
+                        "Name": "Dihedral RMSD (Numba)",
+                        "File_Name": "WrongDate2/test.py",
+                        "Description": "Calculates Root-Mean-Squared Deviation (RMSD) of a protein's dihedral angles"
+                       }],
+                       {"Created": CheckDate, "Last_Updated": CheckDate}), 
+                       returns=([],))
+
+
+    unit_test.UnitTest(CheckDate, ("October 31 2023",), (True,))
+    unit_test.UnitTest(CheckDate, ("January 1 1990",), (True,))
+    unit_test.UnitTest(CheckDate, ("January -1 1990",), (False,))
+    unit_test.UnitTest(CheckDate, ("March 16.5 1990",), (False,))
