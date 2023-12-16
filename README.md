@@ -16,6 +16,14 @@ If this doesn't work, try the command
 ```flask --app flaskr run --debug```.
 In either case, in the browser of your choice, open the link http://127.0.0.1:5000/. This will bring you to the home page of the website!
 
+To run the tests, you can run
+```
+cd flaskr
+python3 FormatDocumentation.py
+python3 GetPapers.py
+python3 GetUploadedContent.py
+```
+
 I want to design a wiki page for people in the Thayer Lab at Wesleyan University, both incoming students to the lab and seasoned students who need a refresher on certain topics. As is the case with all labs, our lab as a large amount of highly specific tools, processes, techniques, and strategies that we employ to do research. For an incoming student, this is like drinking from a firehose. I would like to help streamline the process and aid the new student as they learn about tools employed by the lab, while also providing a resource of code and troubleshooting techniques to the more experienced lab members.
 
 In this website, I would like to provide:
