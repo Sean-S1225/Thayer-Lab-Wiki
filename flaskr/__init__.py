@@ -59,6 +59,46 @@ def create_app(test_config=None):
     @app.route("/Theory")
     def Theory():
         return render_template("Theory.html")
+    
+    @app.route("/tleap")
+    def Tleap():
+        return render_template("tleap.html")
+    
+    @app.route("/emin")
+    def Emin():
+        return render_template("emin.html")
+    
+    @app.route("/heating")
+    def Heating():
+        return render_template("heating.html")
+    
+    @app.route("/equil")
+    def Equil():
+        return render_template("equil.html")
+    
+    @app.route("/neutral_dynamics")
+    def NeutralDynamics():
+        return render_template("neutral_dynamics.html")
+    
+    @app.route("/hbond")
+    def HydrogenBonding():
+        return render_template("hbond.html")
+    
+    @app.route("/SecStruct")
+    def SecondaryStructure():
+        return render_template("SecStruct.html")
+    
+    @app.route("/Ramachandran")
+    def Ramachandran():
+        return render_template("Ramachandran.html")
+    
+    @app.route("/MDSectors")
+    def MDSectors():
+        return render_template("MDSectors.html")
+    
+    @app.route("/electrostatics")
+    def Electrostatics():
+        return render_template("electrostatics.html")
 
     def GetCookbookPosts():
         posts = GetUploadedContent.GetValidJSONFiles(
