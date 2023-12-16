@@ -95,11 +95,11 @@ if __name__ == "__main__":
         with open(fileName, "r") as file:
             return file.read()
 
-    UnitTest(GetRecentPapers, (BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html5lib"),),
+    UnitTest(GetRecentPapers, (BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html.parser"),),
              ([{"title": "Molecular Dynamics of Mismatch Detection–How MutS Uses Indirect Readout to Find Errors in DNA", 
                "authors": "A Jayaraj, KM Thayer, DL Beveridge, MM Hingorani", "journal": "Biophysical Journal", "citations": 0, "year": "2023"}],))
     
-    GeneratePages(GetRecentPapers(BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html5lib")), "../tests/RecentPublications/Output.html")
+    GeneratePages(GetRecentPapers(BeautifulSoup(Read("../tests/RecentPublications/FakePage1.html"), "html.parser")), "../tests/RecentPublications/Output.html")
 
     UnitTest(Read, ("../tests/RecentPublications/Output.html",), (\
 """{% extends "layout.html" %}
