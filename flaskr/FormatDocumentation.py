@@ -74,7 +74,7 @@ def GetColor(x: str) -> str:
         The actual color
     """
     colors = ["black", "red", "green", "blue", "yellow", "purple"]
-    col = x.split()[-1].rstrip("\\")
+    col = x.split()[-1].rstrip("\\").rstrip("]")
     if col in colors or (col[0] == "#" and len(col[1:])):
         return col
     return "black"
@@ -88,7 +88,7 @@ def GetSize(x: str) -> str:
     Returns:
         The font size
     """
-    size = x.split()[-1].rstrip("\\")
+    size = x.split()[-1].rstrip("\\").rstrip("]")
     return size if size.isdigit() else "12"
 
 def FormatDocumentation(x: str) -> str:
@@ -114,7 +114,7 @@ def FormatDocumentation(x: str) -> str:
         "\[\/color\]": lambda _: "</span>",
         "\[size \d+?\]": lambda x: f"<span style=\"font-size:{GetSize(x)}px;\">",
         "\[\/size\]": lambda _: "</span>",
-        "\[hplk .+?\]": lambda x: f"<a href={x.split()[-1].rstrip(backslash)}>",
+        "\[hplk .+?\]": lambda x: f"<a href={x.split()[-1].rstrip(backslash).rstrip(']')}>",
         "\[\/hplk\]": lambda _: "</a>",
         "\[center\]": lambda _: "<p style=\"margin: 0 auto; text-align: center;\">",
         "\[\/center\]": lambda _: "</p>",
@@ -151,3 +151,5 @@ if __name__ == "__main__":
 
     unit_test.UnitTest(FormatDocumentation, ("[b]Bold[/b]",), ("<b>Bold</b>",))
     unit_test.UnitTest(FormatDocumentation, ("[it]Bold[/it]",), ("<em>Bold</em>",))
+    unit_test.UnitTest(FormatDocumentation, ("[color red]Bold[/color]",), ("<span style=\"color:red;\">Bold</span>",))
+    unit_test.UnitTest(FormatDocumentation, ("[size 36]Bold[/color]",), ("<span style=\"font-size:36px;\">Bold</span>",))
