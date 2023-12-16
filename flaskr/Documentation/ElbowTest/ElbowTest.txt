@@ -2,6 +2,8 @@ To do the elbow test, follow these steps:<br>
 <h1>[b]>:)[/b]</h1><br>
 &lt;p&gt;Hello &lt;script&gt;badStuff()&lt;/script&gt; world!&lt;/p&gt;
 
+Here's an example of all the fun ways a user may make their documentation more unique:
+
 [it]woah[/it]
 
 [color red]red[/color] [color green]green :)[/color]
