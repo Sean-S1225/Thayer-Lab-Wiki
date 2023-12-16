@@ -78,16 +78,18 @@ def GeneratePages(articles: list, dest: str) -> None:
     with open(dest, "w") as file:
         file.writelines(text)
 
-if __name__ == "__main__":
-    # print(GetPageContent().prettify())
-    x = GetRecentPapers(GetPageContent())
-    for y in x:
-        print("{")
-        for key, val in y.items():
-            print(f"\t{key}: {val}")
-        print("}")
+def GetPapers(path):
+    GeneratePages(GetRecentPapers(GetPageContent()), path)
 
-    GeneratePages(GetRecentPapers(GetPageContent()), "./templates/papers.html")
+if __name__ == "__main__":
+    # x = GetRecentPapers(GetPageContent())
+    # for y in x:
+    #     print("{")
+    #     for key, val in y.items():
+    #         print(f"\t{key}: {val}")
+    #     print("}")
+
+    # GeneratePages(GetRecentPapers(GetPageContent()), "./templates/papers.html")
 
     def Read(fileName):
         with open(fileName, "r") as file:

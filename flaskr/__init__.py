@@ -4,6 +4,7 @@ from sys import path
 path.append("./flaskr")
 import GetUploadedContent
 import FormatDocumentation
+import GetPapers
 
 def create_app(test_config=None):
     # create and configure the app
@@ -50,6 +51,7 @@ def create_app(test_config=None):
     
     @app.route('/papers')
     def RecentPublications():
+        GetPapers.GetPapers("./flaskr/templates/papers.html")
         return render_template("papers.html")
     
     @app.route("/Intro")
