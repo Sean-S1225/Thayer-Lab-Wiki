@@ -8,7 +8,7 @@ Make sure you have the following packages installed via your favorite installer 
 * collections
 * re
 * json
-* BeautifulSoup
+* beautifulsoup4
 * requests
 
 To run the project, `cd` into the ThayerLab directory, so that the `flaskr` directory is in your current working directory. Then run the command:
