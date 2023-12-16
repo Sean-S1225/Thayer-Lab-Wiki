@@ -15,7 +15,7 @@ def GetPageContent() -> BeautifulSoup:
                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9"} 
     r = requests.get(url=URL, headers=headers) 
 
-    soup = BeautifulSoup(r.content, "html5lib")
+    soup = BeautifulSoup(r.content, "html.parser")
 
     return soup
 
