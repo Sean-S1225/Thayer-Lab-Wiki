@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>RMSD: Root Mean Squared Deviation</h1>
+
+<p>View the code cookbook for RMSD code snippets.</p>
+
+<p>
+    Root Mean Squared Deviation (RMSD) is one of the most essential analyses done in a 
+    molecular dynamics lab. RMSD is a function of time that takes a frame and a reference
+    frame, and returns the "deviation" between the frame and the reference frame. RMSD is
+    typically calculated for every frame or a temporal sampling of frames in a simulation, with a single fixed reference
+    structure.
+</p>
+
+<p>
+    RMSD is calculated using the following formula:
+</p>
+
+<p>\[\text{RMSD}(x, r) = \sqrt{\frac{\sum_{i=1}^{n}m_i[(x_{ix} - r_{ix})^2 + (x_{iy} - r_{iy})^2 + (x_{iz} - r_{iz})^2]}{\sum_{i=1}^{n}m_i}}\]</p>
+
+<p>
+    Where \(x\) is the "variable" frame, \(r\) is the reference frame, \(x_{ix}\), \(x_{iy}\), \(x_{iz}\),
+    \(r_{ix}\), \(r_{iy}\), \(r_{iz}\) are the variable frame's and the reference frame's \(i\)-th amino acid's 
+    \(x\), \(y\) and \(z\) coordinates, \(m_i\) is the atomic weight of amino acid \(i\), and \(n\) is the number
+    of amino acids in the structure.
+</p>
+
+<p>
+    The above formula is for mass-weighted RMSD, in the Thayer Lab we typically don't weight
+    the calculation by mass, and instead set \(m_i = 1\) for each \(1 \leq i \leq n\).
+</p>
+
+<p>Here is an example of an RMSD plot:</p><br>
+<img src="static/RMSD.png", alt="An example of an RMSD plot", height="400px", width="auto">
+
+<p>
+    This calculation was performed using a full-length wild-type p53 trajectory. There are a couple
+    of notable things to observe:
+</p>
+
+<ul>
+    <li>Since the first frame is reference, RMSD of frame 1 with reference to frame 1 is zero.</li>
+    <li>From frames 1 to about 100, the RMSD is increasing. This can be seen as as an "extended equilibration", 
+        where the protein is still relaxing from its starting structure.</li>
+    <li>At about frame 100, the RMSD stops significantly increasing. This can be interpreted as the 
+        protein reaching equilibrium. The protein at frame 800 is approximately as different from 
+        frame 1 than it is at frame 200.</li>
+</ul>
+
+<p>Thus the RMSD increasing or decreasing can be seen as the protein adopting a new conformation.</p>
+
+<p>Here are some common ways RMSD is calculated:</p>
+
+<ul>
+    <li>RMSD computed for each frame, with the first frame as the reference</li>
+    <li>RMSD computed for each frame, with the average structure as reference</li>
+    <li>RMSD computed for each frame, with the last frame as the reference</li>
+    <li>RMSD computed for each frame, with the reference structure of frame \(n\) set to frame \(n-1\)</li>
+</ul>
+
+<p><strong>We have determined that RMSD is only really useful for determining if a MD simulation
+    failed or not; determining mutant rescue or other properties should be confirmed with further testing.
+</strong></p>
+
+{% endblock content %}

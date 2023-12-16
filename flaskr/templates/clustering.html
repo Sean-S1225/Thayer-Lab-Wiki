@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Clustering</h1>
+
+<p>View the code cookbook for clustering code snippets.</p>
+
+<p>
+    Clustering is a very powerful tool that allows us to identify important substates
+    of a protein and reduce the amount of data analyzed. There are many different types
+    of clustering algorithms, such as K-Means, DBScann, DPeaks, etc; the Thayer Lab
+    primarily uses K-Means.
+</p>
+
+<p>
+    The basic idea of clustering is that given a number \(k\) and a metric, \(k\) representative frames of
+    a simulation are chosen as centroids. This is the first iteration.
+</p>
+
+<p>
+    Then the "distance" from every centroid to every other frame is calculated using the metric, and
+    in some process, the centroids are updated. Each frame is assigned a centroid, based on which is closest.
+    This is the second iteration.
+</p>
+
+<p>
+    Clustering typically continues until none of the centroid assignments change between iterations, or
+    some maximum iteration count is reached.
+</p>
+
+<p>
+    Different clustering methods have different ways of determining the number of clusters in a dataset.
+    In the K-Means Clustering, the user provides the number of clusters (thus the name).
+    Additionally, different metrics may be explored, buy by far the most common is <a href="RMSD">RMSD</a>.
+    Thus the distance between a frame and a centroid is the RMSD between the two.
+</p>
+
+<img src="KMeans.jpg" alt="A diagram showing how K-Means Clustering can split a dataset into natural clusters.">
+
+<p>
+    Since in K-Means Clustering, the choice of \(k\) clusters is quite arbitrary, we commonly compute
+    the algorithm for \(2 \leq k \leq 7\). We want to test how well the choice of
+    \(k\) partitions the data (does one cluster represent many different substates, is one substate
+    split between multiple different clusters, etc.).
+</p>
+
+<p>We do this using something called the Elbow Test.</p>
+
+<h2>Elbow Test</h2>
+
+<p>View the code cookbook to learn how to do the elbow test.</p>
+
+<img src="ElbowTest.jpg" alt="An exponential decay plot showing the diminishing returns of adding more clusters.">
+
+<p>
+    We can identify the approximate optimal number of clusters by seeing for what value of \(k\) does the
+    average distance to each cluster start decreasing.
+</p>
+
+<p>
+    For \(k = 1\), every frame in the simulation is assigned the same cluster. No information is gained; we have underfit the data.
+    When \(k\) is equal to the number of frames in the simulation, the each frame is assigned to its own
+    unique cluster, and no two frames share a cluster. No information is gained again, we have overfit the data.
+    As we add more clusters, there are diminishing returns on the information gained.
+</p>
+
+<p>
+    Thus we want to find a number \(k\) such that the average distance to any other frame within a cluster
+    is low, but not "too low".
+</p>
+
+<p>
+    For example, we can see that in the above diagram, the about \(k=3\), increasing the number of clusters
+    doesn't improve the average distance to each of the centroids by much. So we say that \(k=3\) is the 
+    optimum number of clusters.
+</p>
+
+<p>We can verify that 3 clusters is a good choice using the Left Shift Test.</p>
+
+<h2>Left Shift Test</h2>
+
+<p>View the code cookbook to learn how to do the left shift test.</p>
+
+<p>
+    Now that we have determined approximately what value \(k\) is, we typically perform the left shift test 
+    on \(k\), \(k+1\), and \(k-1\).
+</p>
+
+<img src="LeftShift_2.png", alt="The left shift test performed on k=2, we can see that this is not enough clusters">
+<img src="LeftShift_3.png", alt="The left shift test performed on k=3, we can see that there is good separation on the clusters, suggesting this was a good choice of k">
+<img src="LeftShift_4.png", alt="The left shift test performed on k=4, this looks to be a reasonable choice, though typically we chose to use the fewest number of clusters possible">
+
+<p>
+    The left shift test outputs a histogram containing the frequency of different RMSD values, with reference to
+    a specific centroid. For the plot displaying RMSD values with reference to centroid \(n\), we want to see a 
+    good amount of separation between the lines for centroid \(n\) and the other centroids.
+</p>
+
+<p>
+    For 2 clusters, we can see that there is not good separation. This, in combination with the elbow test tells us
+    that we chose too few clusters.
+</p>
+
+<p>For 3 clusters, there is good separation between the line for centroid \(n\) and the other centroids.</p>
+
+<p>
+    For 4 clusters, there is also good separation between the line for centroid \(n\) and the other centroids,
+    but we would choose \(k=3\), because typically we choose the lowest value of \(k\) possible.
+</p>
+
+<h2>Conclusions and what to do with clustering</h2>
+
+<p>
+    Now that a value of \(k\) has been chosen and verified to partition the data well, we can start doing analyses with them.
+    As these clusters represent different conformational states of the protein, the sky is the limit on what analyses could be
+    done with them, but some common analyses include:
+</p>
+
+<ul>
+    <li>Time-based RMSD with reference to one of the centroids, to determine when the simulation is similar to one of the centroids</li>
+    <li>If multiple simulations have been clustered together, we can look at when two simulations are clustered together to determine when the simulations are similar</li>
+    <li>Comparing hydrogen bonding between the different centroids</li>
+</ul>
+
+{% endblock content %}

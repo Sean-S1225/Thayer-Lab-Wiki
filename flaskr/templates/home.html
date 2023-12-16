@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Welcome to the Thayer Lab!</h1>
+
+    <p>
+        The Thayer Lab is a lab at Wesleyan University, in Middletown, Connecticut.
+        Our goal is simple: to cure cancer with computers.
+    </p>
+
+    <p>
+        The Thayer Lab has been run by Kelly Thayer since _____. We are at the forefront of science
+        in the field of Molecular Dynamics, an exciting field of science that allows the study of
+        macromolecules, namely proteins and DNA. With this powerful tool at our disposal, we are able
+        to investigate everything from straightforward topics like how the presence of a drug will
+        impact the behavior of a protein to extremely abstract topics, such as how allosteric signals
+        propagate through a protein.
+    </p>
+
+    <p>
+        We are specifically interested in the protein p53: the famous Guardian of the Genome. Over 50% of
+        human cancers feature a mutated form of p53. Though we are interested in all mutations of p53, one
+        specific mutation interests us especially: the Y220C mutation, which replaces the cystine 
+        amino acid 220 with a tyrosine. We are so interested in this because there the drug PK11000
+        has been shown eliminate Y220C-p53-induced tumors in vivo, albeit with dire side effects.
+    </p>
+
+    <p>
+        Thus our lab is focused on studying how PK11000 is able to restore the wild type function of the
+        Y220C p53 mutation, and how we can use this information to design a smarter and more targeted
+        drug. Once this has been done, we hope to generalize our methods to other mutations and other
+        splice isoforms of p53.
+    </p>
+
+    <img src="static/MercuryConferenceGroupPicture.jpeg", alt="A group picture of participants at the Mercury 2023 conference">
+    <p>
+        Picture taken from the 2023 Mercury Conference, a conference designed for undergraduate students focusing in
+        computational biology and theoretical chemistry.<br>
+        Bottom left to right: Luis, Evelyn, Conrad<br>
+        Second to bottom row, left to right: Pete, Sean<br>
+        Third to bottom row, left to right: Patton, Fernando
+    </p>
+
+{% endblock content %}

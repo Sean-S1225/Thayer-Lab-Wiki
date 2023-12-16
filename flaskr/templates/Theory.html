@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<p>
+    It's easy to take for granted how much we use sight in scientific research. So much of science is
+    running simulations, watching and seeing what happens, then drawing conclusions and running more test.
+    This becomes impossible when your target of research shrinks below a certain size. Namely, proteins are
+    far too small to be observed directly.
+</p>
+
+<p>
+    Methods of studying proteins indirectly have developed tremendously over the past century, but still prove
+    incapable of answering some of the most important questions in biology, such as how allosteric <em>actually</em>
+    propogate through a protein, or more specific questions, such as, "does the introduction of the drug PK11000 to
+    the Y220C mutation of p53 restore wild type activity?".
+</p>
+
+<p>
+    This is where Molecular Dynamics (MD) simulations come in. They allow us to probe the lowest levels of protein
+    dynamics to understand this hidden world.
+</p>
+
+<p>
+    An MD simulation consists of a system of atoms, and a physics model governing the interactions between these atoms.
+    The system typically contains the protein of interest, in a "box" of water.
+    MD simulations tracks the positions and velocities of these atoms over the course of a simulation, which are
+    typically on a nanosecond (one billionth of a second) or microsecond (one millionth of a second) time scale.
+</p>
+
+<p>
+    From this data, a trajectory is created, which contains the data generated (positions and velocities) in the simulation.
+    This data can then be studied to answer questions such as the ones posed above: the electrostatic energetics of 
+    system can be studied to try to observe allosteric pathways; the deviations of the proteins over time can be
+    analyzed to see if the mutated Y220C p53 occupies different conformational states than the wild type or mutated and drugged
+    protein.
+</p>
+
+<p>
+    The first MD simulation was performed in the late 1950s on simple gasses, and the first MD simulation 
+    performed on a protein was done in the 1970s. Due to an explosion in the number of protein structures 
+    available and the amount of computational resources available, the number of MD simulations appearing
+    in publications has drastically increased. The number of papers using MD simulations doubled between
+    2007 and 2017, going from only 400 to over 1000.
+</p>
+
+<p>
+    There are three main MD simulation packages, Amber, GROMACS, and LAMMPS, though they do essentially
+    the same thing, though LAMMPS is typically for larger systems. 
+</p>
+
+<p>
+    An MD simulation operates on this formula (or some slight variation of it):
+</p>
+
+<p>
+    \[E_{total} = \sum_{bonds}K(r-r_{eq})^2 + \sum_{angles}K_\theta(\theta - \theta_{eq})^2 + 
+    \sum_{dihedrals}\frac{V_n}{2}(1+\cos(n\phi - \gamma)) + \sum_{i < j}\left(\frac{A_{ij}}{R_{ij}^{12}} - 
+    \frac{B_{ij}}{R_{ij}^6} + \frac{q_iq_j}{\varepsilon R_{ij}}\right)\]
+</p>
+
+<p>
+    Where the four portions of the above equation correspond to:
+</p>
+
+<ol>
+    <li>Energetics between bonded atoms (models as springs)</li>
+    <li>Rotational energies</li>
+    <li>Dihedral energies</li>
+    <li>Van der Waals interactions modeled through Lennard-Jones potential and electrostatic interactions</li>
+</ol>
+
+<p>
+    Running an MD simulation typically consists of five steps:
+</p>
+<ul>
+    <li>
+        <a href="tleap">tLEaP</a>:
+        <ul>
+            <li>Converting a PDB file into a format Amber understands, with the correct parameters</li>
+        </ul>
+    </li>
+
+    <li>
+        <a href="emin">Energy Minimization:</a>
+        <ul>
+            <li>Gradually loosening the constraints on the system</li>
+        </ul>
+    </li>
+
+    <li><a href="heating">Heating:</a>
+        <ul>
+            <li>"Heating" the simulation, i.e., giving velocities to atoms</li>
+        </ul>
+    </li>
+
+    <li><a href="equil">Equilibration:</a>
+        <ul>
+            <li>Additional loosening of the simulation</li>
+        </ul>
+    </li>
+
+    <li><a href="neutral_dynamics">Neutral Dynamics:</a>
+        <ul>
+            <li>The simulation itself; this is where the data we care about is generated</li>
+        </ul>
+    </li>
+</ul>
+
+<p>Sources:</p>
+<ul>
+    <li>
+        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6209097/#:~:text=Molecular%20dynamics%20(MD)%20simulations%20predict,and%20Mc%20Cammon%2C%202002).
+    </li>
+    <li>
+        https://bmcbiol.biomedcentral.com/articles/10.1186/1741-7007-9-71
+    </li>
+</ul>
+
+{% endblock content %}

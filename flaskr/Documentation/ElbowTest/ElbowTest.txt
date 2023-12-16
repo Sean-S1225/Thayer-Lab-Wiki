@@ -1,0 +1,29 @@
+To do the elbow test, follow these steps:<br>
+<h1>[b]>:)[/b]</h1><br>
+&lt;p&gt;Hello &lt;script&gt;badStuff()&lt;/script&gt; world!&lt;/p&gt;
+
+[it]woah[/it]
+
+[color red]red[/color] [color green]green :)[/color]
+
+[color #12ABfc]???[/color]
+
+[size 36]BIG[/size]
+
+[hplk https://www.google.com/]Google[/hplk]
+
+[center]center[/center]
+[right]right[/right]
+
+[list]
+[*] One [/*]
+[*] Two [/*]
+[*] Three [/*]
+[/list]
+
+This is some text
+
+[list]
+[*] Four [/*]
+[*] Five [/*]
+[/list]
